@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <style>
+        *{
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        .container{
+            width: 440px;
+            height: 480px;
+            background: #fff;
+            box-shadow: 0 10px 15px rgba(179, 179, 179, 0.7);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            border-radius: 7px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+            padding: 1rem;
+            font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+        }
+        .container h2{
+            color: #0A66C3;
+            font-size: 1.6rem;
+        }
+        .container h2 i{
+            font-size: 1.8rem;
+            padding-left: 0.1rem;
+        }
+        .intro-text p{
+            font-size: 1.8rem;
+            padding-top: 0.3rem;
+        }
+        .input{
+            position: relative;
+            width: 100%;
+            height: 50px;
+            margin-bottom: 0.7rem;
+        }
+        .input input{
+            width: 100%;
+            height: 50px;
+            padding-top: 1.1rem;
+            padding-left: 9px;
+            outline: none;
+            border: 1px solid #8c8c8c;
+            border-radius: 3px;
+            transition: 0.2s;
+            font-size: 1rem;
+        }
+        .input label{
+            position: absolute;
+            top: 30%;
+            left: 10px;
+            font-size: 1.1rem;
+            color: #8c8c8c;
+            transition: 0.2s;
+        }
+        .input input:focus ~ label, .input input:valid ~ label{
+            top: 10%;
+            font-size: 0.8rem;
+            color: #000;
+        }
+        .input input:focus{
+            border-width: 2px;
+            border-color: #0A66C3;
+        }
+        button{
+            height: 50px;
+            background: #078aa3;
+            outline: none;
+            border: none;
+            border-radius: 30px;
+            color: #fff;
+            font-size: 1.2rem;
+            font-weight: bolder;
+        }
+        button:hover {
+            cursor: pointer;
+            color: #ffffff;
+            background-color: #034450;
+            border-color: #010e10;
+        }
+        .fa {
+            margin-left: -12px;
+            margin-right: 8px;
+        }
+        .fa-hide {
+            display: none;
+        }
+        button:disabled,
+        button[disabled]{
+            border: 1px solid #999999;
+            background-color: #cccccc;
+            color: #666666;
+        }
+        .alert{
+            background-color: #f2dede;
+            border-color: #ebccd1;
+            color: #a94442;
+            border-radius: 8px;
+            padding: 8px;
+        }
+        .alert-hide {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="intro-text">
+        <h1>Login</h1>
+        <p>Accesso riservato agli utenti interni</p>
+    </div>
+    <div class="inputs">
+        <div class="input">
+            <input type="text" name="username" id="username" required/>
+            <label for="username">
+                Username
+            </label>
+        </div>
+        <div class="input">
+            <input type="password" name="password" id="password" required/>
+            <label for="password">
+                Password
+            </label>
+        </div>
+    </div>
+    <button id="submit" onclick="signIn()"><i id="loader" class="fa-hide fa fa-spinner fa-spin"></i>Sign in</button>
+    <div id="alert" class="alert-hide alert"><strong><span>Login Failed.</span></strong> <span>Username or password incorrect</span></div>
+    <script>
+        function signIn() {
+            var username = document.getElementById('username').value || '';
+            var password = document.getElementById('password').value || '';
+            var submitBtn = document.getElementById('submit');
+            var loader = document.getElementById('loader');
+            var errorEl = document.getElementById('alert');
+            if (username && password) {
+                submitBtn.disabled = true;
+                errorEl.classList.add("alert-hide");
+                loader.classList.remove("fa-hide");
+                var authHeader = 'Basic ' + window.btoa(username + ':' + password);
+                var baseUrl = 'rest/geostore';
+                fetch(baseUrl + '/session/login', {
+                    method: 'POST',
+                    headers: {
+                        Authorization: authHeader
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data =>
+                        fetch(baseUrl + '/users/user/details?includeattributes=true', {
+                            method: 'GET',
+                            headers: {
+                                Authorization: `Bearer ${data.access_token}`,
+                                'Accept': 'application/json'
+                            }
+                        })
+                            .then(response => response.json())
+                            .then(userData => {
+                                localStorage.setItem('mapstore2.persist.security', JSON.stringify({
+                                    authHeader,
+                                    token: data.access_token,
+                                    refresh_token: data.refresh_token,
+                                    expires: data.expires,
+                                    user: userData.User
+                                }));
+                                window.location.href = './';
+                            })
+                    )
+                    .catch(e => {
+                        errorEl.classList.remove("alert-hide");
+                        submitBtn.disabled = false;
+                        loader.classList.add("fa-hide");
+                    });
+            }
+        }
+    </script>
+</div>
+</body>
+</html>

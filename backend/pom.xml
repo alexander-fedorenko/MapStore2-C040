@@ -241,10 +241,23 @@
     </dependencies>
 
     <repositories>
-      <repository>
-        <id>geosolutions</id>
-        <name>GeoSolutions Maven Repository</name>
-        <url>http://maven.geo-solutions.it/</url>
-      </repository>
+        <!-- GeoSolutions -->
+        <repository>
+            <id>geosolutions</id>
+            <name>GeoSolutions Repository</name>
+            <url>https://maven.geo-solutions.it</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+
+        <repository>
+            <id>osgeo</id>
+            <name>Open Source Geospatial Foundation Repository</name>
+            <url>https://repo.osgeo.org/repository/release/</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
     </repositories>
 </project>
