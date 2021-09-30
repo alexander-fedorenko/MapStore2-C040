@@ -25,12 +25,15 @@
   "loadAfterTheme": true,
   "useAuthenticationRules": true,
   "authenticationRules": [{
-    "urlPattern": ".*geostore.*",
-    "method": "bearer"
-    }, {
-      "urlPattern": "\\/geoserver\\-test.*",
-      "authkeyParamName": "ms2-authkey",
-      "method": "authkey"
+        "urlPattern": ".*geostore.*",
+        "method": "bearer"
+      }, {
+        "urlPattern": ".*rest/config.*",
+        "method": "bearer"
+      }, {
+        "urlPattern": "\\/geoserver\\-test.*",
+        "authkeyParamName": "ms2-authkey",
+        "method": "authkey"
   }],
   "mapConstraints": {
     "minZoom": 10,
