@@ -113,7 +113,7 @@
         }
     </style>
 </head>
-<body>
+<body onload="redirect()">
 <div class="container">
     <div class="intro-text">
         <h1>Login</h1>
@@ -180,6 +180,12 @@
                         submitBtn.disabled = false;
                         loader.classList.add("fa-hide");
                     });
+            }
+        }
+        function redirect() {
+            var securityObj = JSON.parse(localStorage.getItem('mapstore2.persist.security'));
+            if (securityObj && securityObj.token) {
+                window.location.href = './';
             }
         }
     </script>
