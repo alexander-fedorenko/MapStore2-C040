@@ -372,7 +372,7 @@ export const saveCantieriAreas = (action$, store) =>
                         [
                             // SOME PROBLEM ON SERVER SIDE DO NOT ALLOW TO SAVE
                             deleteByFilter(
-                                filter(and(property("ID_CANTIERE").equalTo(cantierState.id), property("TIPOLOGIA").equalTo(cantierState.typology))),
+                                filter(and(property("ID_CANTIERE").equalTo(cantierState.id), property("TIPOLOGIA").equalTo(cantierState.typology)))
                             ),
                             insert(reprojectGeoJson({type: "FeatureCollection", features: getAreasLayer(store).features}, store.getState().map.present.projection, "EPSG:4326"))
                         ],

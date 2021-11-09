@@ -1114,11 +1114,14 @@
       {
         "name": "DashboardEditor",
         "cfg": {
-          "catalog": {
-            "url": "/geoserver-test/csw",
-            "type": "csw",
-            "title": "Demo CSW Service",
-            "autoload": true
+          "selectedService": "GeoPortale Comune di Genova",
+          "services": {
+            "GeoPortale Comune di Genova": {
+              "url": "/geoserver-test/csw",
+              "type": "csw",
+              "title": "GeoPortale Comune di Genova",
+              "autoload": true
+            }
           },
           "containerPosition": "columns"
         }

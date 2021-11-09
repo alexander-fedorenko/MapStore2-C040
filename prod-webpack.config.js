@@ -26,18 +26,20 @@ const config = require('./MapStore2/build/buildConfig')(
     paths,
     [extractThemesPlugin, ModuleFederationPlugin],
     true,
-    "dist/", // the old value was "dist/"   ?
+    undefined,
     null,
     [
         new HtmlWebpackPlugin({
             template: path.join(paths.base, 'indexTemplate.html'),
             chunks: ['MapStore2-C040'],
+            publicPath: 'dist/',
             inject: true,
             hash: true
         }),
         new HtmlWebpackPlugin({
             template: path.join(paths.base, 'embeddedTemplate.html'),
             chunks: ['embedded'],
+            publicPath: 'dist/',
             inject: true,
             hash: true,
             filename: 'embedded.html'
@@ -45,13 +47,15 @@ const config = require('./MapStore2/build/buildConfig')(
         new HtmlWebpackPlugin({
             template: path.join(paths.base, 'apiTemplate.html'),
             chunks: ['ms2-api'],
-            inject: 'head',
+            publicPath: 'dist/',
+            inject: 'body',
             hash: true,
             filename: 'api.html'
         }),
         new HtmlWebpackPlugin({
             template: path.join(__dirname, 'geostory-embedded-template.html'),
             chunks: ['geostory-embedded'],
+            publicPath: 'dist/',
             inject: "body",
             hash: true,
             filename: 'geostory-embedded.html'
@@ -59,12 +63,14 @@ const config = require('./MapStore2/build/buildConfig')(
         new HtmlWebpackPlugin({
             template: path.join(__dirname, 'dashboard-embedded-template.html'),
             chunks: ['dashboard-embedded'],
+            publicPath: 'dist/',
             inject: 'body',
             hash: true,
             filename: 'dashboard-embedded.html'
         })
     ],
     {
+        "@mapstore/patcher": path.resolve(__dirname, "node_modules", "@mapstore", "patcher"),
         '@mapstore': path.resolve(__dirname, 'MapStore2/web/client'),
         '@js': path.resolve(__dirname, 'js')
     }
