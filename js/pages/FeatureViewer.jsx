@@ -35,7 +35,7 @@ class MapViewerPage extends React.Component {
     };
 
     UNSAFE_componentWillMount() {
-        this.props.onMount(ConfigUtils.getConfigProp("wmsURL"), this.props.match.params, "config.json", isWmsViewer(this.props.match.path));
+        this.props.onMount(ConfigUtils.getConfigProp("wmsURL"), this.props.match.params, "configs/config.json", isWmsViewer(this.props.match.path));
         if (!ConfigUtils.getDefaults().ignoreMobileCss) {
             if (this.props.mode === 'mobile') {
                 require('../../MapStore2/web/client/product/assets/css/mobile.css');

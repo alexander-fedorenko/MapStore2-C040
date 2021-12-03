@@ -23,7 +23,7 @@ export const startLoading = ( action$ ) =>
         .switchMap( (action) =>
             Rx.Observable.of(resetControls())
                 .concat(
-                    action.configURL ? axios.get("config.json")
+                    action.configURL ? axios.get(action.configURL)
                         .then( (response) => {
                             if (typeof response.data === 'object') {
                                 return configureMap(response.data);
@@ -65,7 +65,7 @@ export const startLoading = ( action$ ) =>
                                     )
                             )
                         )
-                ).catch( e => Rx.Observable.of(configureError('Configuration file broken (' + "config.json" + '): ' + e.message)))
+                ).catch( e => Rx.Observable.of(configureError('Configuration file broken (' + action.configURL + '): ' + e.message)))
         );
 export const updateFeatureLoader = action$ => action$.ofType(UPDATE).switchMap((action) => Rx.Observable.from([
     removeLayer(WMS_ID),
