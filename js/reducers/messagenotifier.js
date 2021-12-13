@@ -12,7 +12,7 @@ import assign  from 'object-assign';
 import { filter } from 'lodash';
 
 function messageNotifier(state = {
-    persistentNotifications: [],
+    persistentNotifications: []
 }, action) {
     switch (action.type) {
     case PERSIST_NOTIFICATION: {

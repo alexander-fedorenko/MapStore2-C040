@@ -36,5 +36,5 @@ export function ceaseNotification(uid) {
 
 export default {
     PERSIST_NOTIFICATION, persistNotification,
-    CEASE_NOTIFICATION, ceaseNotification,
+    CEASE_NOTIFICATION, ceaseNotification
 };

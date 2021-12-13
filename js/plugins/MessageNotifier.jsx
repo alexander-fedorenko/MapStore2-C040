@@ -6,9 +6,9 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import React, {useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import { connect } from 'react-redux';
-import { size, map, forEach, includes, filter } from 'lodash';
+import { map, forEach, includes, filter } from 'lodash';
 import messageNotifier from '@js/reducers/messagenotifier';
 import epics from '@js/epics/messagenotifier';
 
@@ -27,7 +27,7 @@ import assign from "object-assign";
  * @example
  * {name: "MessageNotifier"}
  */
-const MessageNotifier = ({ location, persistentNotifications, show, pluginCfg: {
+const MessageNotifier = ({ location, persistentNotifications, showNotification, pluginCfg: {
     messages = [],
     enabled = false,
     initialDelay = 500
@@ -35,8 +35,8 @@ const MessageNotifier = ({ location, persistentNotifications, show, pluginCfg: {
     const [notifications, setNotifications] = useState([]);
     useEffect(() => {
         if (messages.length && enabled) {
-            const mapped = map(messages, (el,idx) => {
-                return assign({}, el, {uid: el.uid ?? Date.now()+idx, level: el.level ?? 'info'});
+            const mapped = map(messages, (el, idx) => {
+                return assign({}, el, {uid: el.uid ?? Date.now() + idx, level: el.level ?? 'info'});
             });
             setNotifications(mapped);
         }
@@ -45,7 +45,7 @@ const MessageNotifier = ({ location, persistentNotifications, show, pluginCfg: {
         forEach(notifications, (notification) => {
             // @todo: Use smarter way to wait while page is fully loaded
             setTimeout(function() {
-                show({
+                showNotification({
                     ...notification,
                     persistent: true
                 }, notification.level);
@@ -62,16 +62,16 @@ const MessageNotifier = ({ location, persistentNotifications, show, pluginCfg: {
     }, [location.pathname, location.hash]);
 
     return false;
-}
+};
 
 export default createPlugin('MessageNotifier', {
     component: connect(createStructuredSelector({
         location: locationSelector,
-        persistentNotifications: persistentNotificationsSelector,
-        }),
-        {
-            show: show,
-        }
+        persistentNotifications: persistentNotificationsSelector
+    }),
+    {
+        showNotification: show
+    }
     )(MessageNotifier),
     reducers: {
         messageNotifier

@@ -30,8 +30,8 @@ export const makeNotificationPersistent = action$ =>
 export const ceaseNotificationPersistence = (action$, store) =>
     action$.ofType(HIDE_NOTIFICATION)
         .switchMap(({uid}) => {
-            const messageNotifierState = store.getState().messageNotifier
-            const isPersistent = size(filter(get(messageNotifierState, 'persistentNotifications', []), (el) => el === uid))
+            const messageNotifierState = store.getState().messageNotifier;
+            const isPersistent = size(filter(get(messageNotifierState, 'persistentNotifications', []), (el) => el === uid));
             return Rx.Observable.of(isPersistent ? ceaseNotification(uid) : false);
         });
 
