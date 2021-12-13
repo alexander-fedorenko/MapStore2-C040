@@ -8,15 +8,22 @@
 
 import {useEffect, useState} from 'react';
 import { connect } from 'react-redux';
-import { map, forEach, includes, filter } from 'lodash';
+import { map, forEach, filter, includes } from 'lodash';
+import { createStructuredSelector } from 'reselect';
 import messageNotifier from '@js/reducers/messagenotifier';
+
 import epics from '@js/epics/messagenotifier';
-
-
+import { persistNotifications, initialize } from '@js/actions/messagenotifier';
 import {show} from '@mapstore/actions/notifications';
 import {createPlugin}  from '@mapstore/utils/PluginsUtils';
-import { createStructuredSelector } from 'reselect';
-import {locationSelector, persistentNotificationsSelector} from "@js/selector/cantieri";
+import ConfigUtils from '@mapstore//utils/ConfigUtils';
+
+import {
+    locationSelector,
+    persistentNotificationsSelector,
+    notificationsSelector,
+    persistentNotificationsState
+} from "@js/selector/cantieri";
 import assign from "object-assign";
 
 /**
@@ -27,50 +34,57 @@ import assign from "object-assign";
  * @example
  * {name: "MessageNotifier"}
  */
-const MessageNotifier = ({ location, persistentNotifications, showNotification, pluginCfg: {
-    messages = [],
-    enabled = false,
-    initialDelay = 500
-} }) => {
-    const [notifications, setNotifications] = useState([]);
+const MessageNotifier = ({ location, pluginCfg,
+    persistentNotifications, notifications, persist,
+    initialize: initializeConfig, initialized, showNotification  }) => {
+    const miscSettings = ConfigUtils.getConfigProp('miscSettings');
+    const messages = pluginCfg.messages ?? miscSettings?.messageNotifier?.messages ?? [];
+    const enabled = pluginCfg.enabled ?? miscSettings?.messageNotifier?.enabled ?? false;
+    const initialDelay = pluginCfg.initialDelay ?? miscSettings?.messageNotifier?.initialDelay ?? 500;
+
+    const [processedEntities, setProcessedEntities] = useState([]);
     useEffect(() => {
-        if (messages.length && enabled) {
-            const mapped = map(messages, (el, idx) => {
-                return assign({}, el, {uid: el.uid ?? Date.now() + idx, level: el.level ?? 'info'});
-            });
-            setNotifications(mapped);
+        const mapped = map(messages, (el, idx) => {
+            return assign({}, el, {uid: el.uid ?? "messageNotifier_" + idx, level: el.level ?? 'info'});
+        });
+        if (enabled) {
+            if (mapped.length) {
+                setProcessedEntities(mapped);
+            }
+            if (!initialized) {
+                initializeConfig();
+                persist(map(mapped, m => m.uid));
+            }
         }
     }, []);
     useEffect(() => {
-        forEach(notifications, (notification) => {
-            // @todo: Use smarter way to wait while page is fully loaded
-            setTimeout(function() {
-                showNotification({
-                    ...notification,
-                    persistent: true
-                }, notification.level);
-            }, initialDelay);
+        const persistent = filter(processedEntities, (el) => includes(persistentNotifications, el.uid));
+        forEach(persistent, (entity) => {
+            if (filter(notifications, (el) => el.uid === entity.uid).length === 0) {
+                // @todo: Use smarter way to wait while page is fully loaded
+                setTimeout(function() {
+                    showNotification({
+                        ...entity,
+                        persistent: true
+                    }, entity.level);
+                }, initialDelay);
+            }
         });
-    }, [notifications]);
-
-    useEffect(() => {
-        // Respawn notifications that were persistent by setting persistency flag
-        const persistent = filter(notifications, (el) => includes(persistentNotifications, el.uid));
-        if (persistent.length) {
-            setNotifications(persistent);
-        }
-    }, [location.pathname, location.hash]);
-
+    }, [processedEntities, location.pathname, location.hash]);
     return false;
 };
 
 export default createPlugin('MessageNotifier', {
     component: connect(createStructuredSelector({
         location: locationSelector,
-        persistentNotifications: persistentNotificationsSelector
+        persistentNotifications: persistentNotificationsSelector,
+        notifications: notificationsSelector,
+        initialized: persistentNotificationsState
     }),
     {
-        showNotification: show
+        showNotification: show,
+        persist: persistNotifications,
+        initialize
     }
     )(MessageNotifier),
     reducers: {

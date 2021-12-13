@@ -11,7 +11,9 @@ export const areasLayerSelector = (state) => get(state, "layers.flat").filter(l 
 export const serviceRESTUrlSelector = (state) => get(state, "cantieri.serviceRESTUrl");
 export const routingSelector = state => get(state, "routing.location.pathname");
 export const locationSelector = state => get(state, "router.location");
+export const notificationsSelector = state => get(state, "notifications");
 export const persistentNotificationsSelector = state => get(state, "messageNotifier.persistentNotifications");
+export const persistentNotificationsState = state => get(state, "messageNotifier.initialized");
 
 export default {
     stateSelector,
@@ -19,5 +21,7 @@ export default {
     areasLayerSelector,
     serviceRESTUrlSelector,
     routingSelector,
-    persistentNotificationsSelector
+    notificationsSelector,
+    persistentNotificationsSelector,
+    persistentNotificationsState
 };

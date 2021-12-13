@@ -65,6 +65,21 @@
             "extent": [1241482.0019, 973563.1609, 1830078.9331, 5215189.0853],
             "worldExtent": [6.6500, 8.8000, 12.0000, 47.0500]
         }],
+  "miscSettings": {
+    "messageNotifier": {
+      "enabled": true,
+      "initialDelay": 1000,
+      "messages": [
+        {
+          "title": "Avviso",
+          "message": "Gentile utente, dal 15/12/21 h 14.00 al 18/12/21 h 19.00 si potranno riscontrare alcuni disservizi del sistema. Verrà effettuato un aggiornamento dell'Infrastruttura Dati Territoriali e aggiunte nuove funzionalità, il tutto finalizzato a migliorare il servizio pubblico. Ci scusiamo per i possibili inconvenienti. Ufficio S.I.T.",
+          "autoDismiss": 0,
+          "position": "tc",
+          "level": "warning"
+        }
+      ]
+    }
+  },
   "initialState": {
     "defaultState": {
       "annotations": {
@@ -474,6 +489,7 @@
 
       },
       "Notifications",
+      "MessageNotifier",
       {
         "name": "LayerDownload",
         "cfg": {
@@ -998,21 +1014,7 @@
       }
   }, "Login",
       "Notifications",
-      {
-        "name": "MessageNotifier",
-        "cfg": {
-          "enabled": false,
-          "messages": [
-            {
-              "title": "notification.warning",
-              "message": "notification.maintenance",
-              "autoDismiss": 0,
-              "position": "tc",
-              "level": "warning"
-            }
-          ]
-        }
-      }
+      "MessageNotifier"
     ],
     "maps": [{
         "name": "Header",
@@ -1112,6 +1114,7 @@
       },
       "RulesDataGrid",
       "Notifications",
+      "MessageNotifier",
       {
         "name": "RulesEditor",
         "cfg": {
@@ -1181,7 +1184,8 @@
         "name": "Header",
         "hide": true
       },
-      "Notifications", "Home", {
+      "Notifications",
+      "MessageNotifier", "Home", {
         "name": "Cookie",
         "cfg": {
           "externalCookieUrl": "https://smart.comune.genova.it/node/8227",
@@ -1227,7 +1231,8 @@
         },
         "mapType": "openlayers"
       }
-    }, "Notifications", "LavoriPubblici",
+    }, "Notifications",
+      "MessageNotifier", "LavoriPubblici",
         {
       "name": "Search",
       "cfg": {
@@ -1328,6 +1333,7 @@
           }
         },
         "Notifications",
+        "MessageNotifier",
         {
           "name": "FeedbackMask",
           "cfg": {

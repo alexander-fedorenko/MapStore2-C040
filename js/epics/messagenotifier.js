@@ -7,19 +7,9 @@
 */
 import Rx from 'rxjs';
 
-import { ceaseNotification, persistNotification } from '../actions/messagenotifier';
-import { SHOW_NOTIFICATION, HIDE_NOTIFICATION } from "@mapstore/actions/notifications";
+import { ceaseNotification } from '../actions/messagenotifier';
+import { HIDE_NOTIFICATION } from "@mapstore/actions/notifications";
 import { size, filter, get } from 'lodash';
-
-/**
- * Persist notification that is marked as persistent.
- * @param {external:Observable} action$ manages `SHOW_NOTIFICATION`.
- * @memberof epics.messagenotifier
- * @return {external:Observable}
- */
-export const makeNotificationPersistent = action$ =>
-    action$.ofType(SHOW_NOTIFICATION)
-        .switchMap((notification) => Rx.Observable.of(notification.persistent ? persistNotification(notification.uid) : false));
 
 /**
  * Cease notification that is marked as persistent.
@@ -42,6 +32,5 @@ export const ceaseNotificationPersistence = (action$, store) =>
  */
 
 export default {
-    makeNotificationPersistent,
     ceaseNotificationPersistence
 };
