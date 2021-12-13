@@ -996,7 +996,24 @@
       "cfg": {
           "enableContextManager": true
       }
-  }, "Login"],
+  }, "Login",
+      "Notifications",
+      {
+        "name": "MessageNotifier",
+        "cfg": {
+          "enabled": false,
+          "messages": [
+            {
+              "title": "notification.warning",
+              "message": "notification.maintenance",
+              "autoDismiss": 0,
+              "position": "tc",
+              "level": "warning"
+            }
+          ]
+        }
+      }
+    ],
     "maps": [{
         "name": "Header",
         "hide": true

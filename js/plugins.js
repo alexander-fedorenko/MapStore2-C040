@@ -15,6 +15,7 @@ import FooterPlugin from './plugins/Footer';
 import GeoNetworkLinkPlugin from './plugins/GeoNetworkLink';
 import HeaderPlugin from './plugins/Header';
 import LoginPlugin from './plugins/Login';
+import MessageNotifier from "./plugins/MessageNotifier";
 import LoginModalPlugin from './plugins/LoginModal';
 import PrivacyNote from './plugins/PrivacyNote';
 // product plugins
@@ -201,6 +202,7 @@ export default {
         MapTemplatesPlugin,
         MeasurePlugin,
         MediaEditorPlugin,
+        MessageNotifier,
         MetadataExplorerPlugin,
         MousePositionPlugin,
         NotificationsPlugin,
