@@ -67,7 +67,7 @@
         }],
   "miscSettings": {
     "messageNotifier": {
-      "enabled": true,
+      "enabled": false,
       "initialDelay": 1000,
       "messages": [
         {
